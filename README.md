@@ -1,58 +1,429 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Hexagonal Laravel - Aplicação de Estudo
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+<div align="center">
 
-## About Laravel
+[![Laravel](https://img.shields.io/badge/Laravel-13.8-FF2D20?logo=laravel&logoColor=white)](https://laravel.com)
+[![PHP](https://img.shields.io/badge/PHP-8.3%2B-777BB4?logo=php&logoColor=white)](https://php.net)
+[![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Um projeto de **estudo prático** sobre Arquitetura Hexagonal (Ports & Adapters) aplicada ao Laravel, demonstrando como implementar Domain-Driven Design com separação clara de responsabilidades.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+</div>
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+##  O Que É Este Projeto?
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Este é um **projeto educacional** que implementa os princípios de **Arquitetura Hexagonal** em uma aplicação Laravel. O foco é demonstrar como estruturar uma aplicação para que o domínio (lógica de negócio) seja completamente independente do framework, facilitando testes, manutenção e escalabilidade.
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Por Que Arquitetura Hexagonal?
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+A arquitetura hexagonal (também conhecida como Ports & Adapters) oferece:
 
-## Agentic Development
+**Isolamento do domínio** - A lógica de negócio não depende do framework
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+**Testabilidade** - Testes unitários sem dependências externas
 
-```bash
-composer require laravel/boost --dev
+**Flexibilidade** - Trocar frameworks, bancos de dados ou implementações sem afetar o core
 
-php artisan boost:install
+**Manutenibilidade** - Código mais limpo e organizado
+
+**Escalabilidade** - Fácil adicionar novos módulos seguindo o mesmo padrão
+
+---
+
+## Arquitetura do Projeto
+
+### Estrutura de Camadas
+
+```
+app/Modules/Livros/
+├── Domain/
+│   ├── Entities/
+│   │   └── Livro.php
+│   ├── Contracts/
+│   │   └── LivroRepositoryInterface.php
+│   └── Exceptions/
+│       └── LivroJaExisteException.php
+│
+├── Application/
+│   ├── UseCases/
+│   │   ├── CadastrarLivroUseCase.php
+│   │   └── ListaLivrosUseCase.php
+│   └── DTOs/
+│       └── CadastrarLivroData.php
+│
+├── Infrastructure/
+│   ├── Repositories/
+│   │   └── LivroRepository.php
+│   └── Models/
+│       └── Livro.php
+│
+└── Presentation/
+    ├── Controllers/
+    │   └── LivroController.php
+    └── Requests/
+        └── CadastrarLivroRequest.php
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+### Fluxo de Dados
 
-## Contributing
+```
+Request HTTP
+    ↓
+CadastrarLivroRequest (Validação)
+    ↓
+LivroController.store() (Entrada)
+    ↓
+CadastrarLivroUseCase.execute() (Orquestração)
+    ↓
+Livro::cadastrar() (Lógica de Negócio)
+    ↓
+LivroRepository.salvar() (Porta)
+    ↓
+Livro Model → Database
+    ↓
+Redirect com sucesso
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+---
 
-## Code of Conduct
+## O Que Foi Implementado
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 1. **Módulo de Livros**
 
-## Security Vulnerabilities
+Um módulo completo de cadastro de livros demonstrando toda a arquitetura hexagonal.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+#### Funcionalidades:
+- **Cadastro de Livros** - Adicionar novos livros com validação
+- **Validação de Domínio** - ISBN único, campos obrigatórios
+- **Listagem de Livros** - Recuperar todos os livros cadastrados
+- **Testes Automatizados** - Testes unitários sem banco de dados
 
-## License
+#### Campos do Livro:
+```php
+- nome           // Título do livro (obrigatório)
+- autor          // Autor (obrigatório)
+- descricao      // Descrição (opcional)
+- genero         // Gênero do livro (obrigatório)
+- paginas        // Quantidade de páginas (obrigatório, > 0)
+- isbn           // ISBN único (obrigatório, único)
+- ja_leu         // Se o usuário já leu (booleano)
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+---
+
+## Como Foi Implementado - Detalhes Técnicos
+
+### 1. **Camada de Domínio (Domain Layer)**
+
+#### Entidade: `Livro.php`
+
+A entidade contém a lógica de negócio pura:
+
+```php
+// Validações internas
+- Nome, autor e ISBN são obrigatórios
+- Páginas deve ser maior que 0
+- ISBN deve ser único
+
+// Factory Method
+Livro::cadastrar() - Cria e valida uma nova instância
+
+// Getters Imutáveis
+$livro->id(), $livro->nome(), etc.
+```
+
+**Princípio aplicado**: A entidade é **independente de qualquer framework**. Pode ser usada em CLI, API, scripts, etc.
+
+#### Contrato: `LivroRepositoryInterface.php`
+
+Define a **porta** de persistência:
+
+```php
+interface LivroRepositoryInterface {
+    public function salvar(Livro $livro): Livro;
+    public function existeComIsbn(string $isbn): bool;
+    public function listar(): array;
+}
+```
+
+**Princípio aplicado**: Inversão de Dependência - O domínio define a interface, não a implementação.
+
+### 2. **Camada de Aplicação (Application Layer)**
+
+#### Use Case: `CadastrarLivroUseCase.php`
+
+Orquestra o fluxo de cadastro:
+
+```php
+public function execute(CadastrarLivroData $data): Livro
+{
+    // 1. Valida se ISBN já existe
+    if ($this->repository->existeComIsbn($data->isbn)) {
+        throw new LivroJaExisteException($data->isbn);
+    }
+
+    // 2. Cria a entidade
+    $livro = Livro::cadastrar($data);
+
+    // 3. Persiste
+    $livro = $this->repository->salvar($livro);
+
+    // 4. Retorna
+    return $livro;
+}
+```
+
+**Princípio aplicado**: Casos de uso orquestram, não implementam. A lógica fica na entidade.
+
+#### DTO: `CadastrarLivroData.php`
+
+Transfer Object com dados de entrada:
+
+```php
+public function __construct(
+    public string $nome,
+    public string $autor,
+    public ?string $descricao,
+    public bool $jaLeu,
+    public int $paginas,
+    public string $genero,
+    public string $isbn,
+) {}
+```
+
+**Princípio aplicado**: Objetos simples de transferência de dados. Nenhuma lógica.
+
+### 3. **Camada de Infraestrutura (Infrastructure Layer)**
+
+#### Repositório: `LivroRepository.php`
+
+Implementa a **porta** definida no domínio:
+
+```php
+class LivroRepository implements LivroRepositoryInterface
+{
+    // Mapeia Livro Entity → Livro Model
+    public function toDomain(Model $model): Livro { }
+
+    // Usa Eloquent para persistir
+    public function salvar(Livro $livro): Livro { }
+
+    // Busca no banco
+    public function existeComIsbn(string $isbn): bool { }
+}
+```
+
+**Princípio aplicado**: Anti-corruption Layer - Separa Modelo Eloquent da Entidade de Domínio.
+
+#### Model: `Livro.php`
+
+Apenas configuração do Eloquent:
+
+```php
+class Livro extends Model
+{
+    protected $fillable = ['nome', 'autor', 'descricao', ...];
+}
+```
+
+**Princípio aplicado**: Model é apenas adaptador, não contém lógica.
+
+### 4. **Camada de Apresentação (Presentation Layer)**
+
+#### Controller: `LivroController.php`
+
+Entrada HTTP:
+
+```php
+public function store(CadastrarLivroRequest $request): RedirectResponse
+{
+    // Request já validou
+    $livro = $this->useCase->execute(
+        new CadastrarLivroData(...$request->validated())
+    );
+
+    return redirect()->route('livros.index')
+        ->with('success', 'Livro cadastrado!');
+}
+```
+
+**Princípio aplicado**: Controller é fino - apenas traduz HTTP para domínio.
+
+#### Form Request: `CadastrarLivroRequest.php`
+
+Validação centralizada:
+
+```php
+public function rules(): array
+{
+    return [
+        'nome'      => 'required|string',
+        'autor'     => 'required|string',
+        'paginas'   => 'required|integer|min:1',
+        'isbn'      => 'required|unique:livros',
+        'genero'    => 'required|string',
+    ];
+}
+```
+
+**Princípio aplicado**: Validação na borda da aplicação.
+
+### 5. **Testes Unitários**
+
+#### `BookRegistrationTest.php`
+
+Testes sem banco de dados real:
+
+```php
+public function test_deve_cadastrar_um_livro()
+{
+    // InMemory repository - sem dependência de BD
+    $repository = new InMemoryLivroRepository();
+
+    $useCase = new CadastrarLivroUseCase($repository);
+
+    $livro = $useCase->execute(new CadastrarLivroData(...));
+
+    $this->assertEquals('O Senhor dos Anéis', $livro->nome());
+}
+```
+
+**Princípio aplicado**: Testes rápidos e isolados. A lógica é testada sem efeitos colaterais.
+
+---
+
+## Setup e Execução
+
+### Pré-requisitos
+- PHP 8.3+
+- Composer
+- Node.js + npm
+- Git
+
+### Instalação
+
+```bash
+# 1. Clone o repositório
+git clone <seu-repositorio>
+cd hexagonal-laravel
+
+# 2. Instale dependências PHP e configure
+composer run setup
+
+# 3. Inicie o desenvolvimento
+composer run dev
+```
+
+Isso vai:
+- Instalar dependências
+- Gerar .env
+- Criar chave de app
+- Rodar migrations
+- Instalar npm
+- Compilar assets
+
+### Estrutura de Comandos
+
+```bash
+# Rodar testes
+composer test
+
+# Iniciar servidor de desenvolvimento
+php artisan serve
+
+# Compilar assets (Vite)
+npm run dev
+
+# Lint/Format (Pint)
+./vendor/bin/pint
+
+# Ver estrutura de módulos
+php artisan module:list
+```
+
+---
+
+## Testando a Aplicação
+
+### Rodar Testes
+
+```bash
+# Todos os testes
+php artisan test
+
+# Apenas testes de um módulo
+php artisan test tests/Unit/Livros
+
+# Com cobertura
+php artisan test --coverage
+```
+
+### Testes Inclusos
+
+**test_deve_cadastrar_um_livro** - Cadastro bem-sucedido
+
+**test_nao_deve_cadastrar_um_livro_com_isbn_duplicado** - Validação de ISBN
+
+---
+
+## Pontos-Chave da Implementação
+
+### 1. **Separação em Camadas**
+
+Cada camada tem uma responsabilidade clara:
+
+| Camada | Responsabilidade | Exemplo |
+|--------|-----------------|---------|
+| **Domain** | Lógica de negócio pura | Validação, factory methods |
+| **Application** | Orquestração de casos de uso | Use cases, DTOs |
+| **Infrastructure** | Implementações técnicas | Repositório, Model |
+| **Presentation** | Interface com exterior | Controller, Form Request |
+
+---
+
+## Recursos para Aprender
+
+### Conceitos Implementados
+
+- **Domain-Driven Design (DDD)** - Foco na lógica de negócio
+- **Ports & Adapters** - Arquitetura hexagonal
+- **Inversion of Control (IoC)** - Inversão de dependências
+- **Clean Code** - Código limpo e compreensível
+- **Test-Driven Development** - Testes prioritários
+
+### Estrutura Escalável
+
+Para adicionar um novo módulo, basta seguir:
+
+```
+app/Modules/NovoModulo/
+├── Domain/
+│   ├── Entities/
+│   ├── Contracts/
+│   └── Exceptions/
+├── Application/
+│   ├── UseCases/
+│   └── DTOs/
+├── Infrastructure/
+│   ├── Repositories/
+│   └── Models/
+└── Presentation/
+    ├── Controllers/
+    └── Requests/
+```
+---
+
+## Próximos Passos (Ideias para Expandir)
+
+- [ ] Adicionar autenticação com JWT
+- [ ] Implementar eventos de domínio
+- [ ] API REST completa
+- [ ] Caching e otimizações
+- [ ] Mais testes de integração
+- [ ] Observability (logs, traces)
+
+---
+
+**Desenvolvido como projeto de estudo em Arquitetura Hexagonal com Laravel**
