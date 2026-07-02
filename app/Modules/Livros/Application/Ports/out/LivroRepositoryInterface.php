@@ -1,6 +1,7 @@
 <?php
 
-namespace App\Modules\Livros\Domain\Contracts;
+namespace App\Modules\Livros\Application\Ports\out;
+
 
 use App\Modules\Livros\Domain\Entities\Livro;
 use Illuminate\Database\Eloquent\Collection;

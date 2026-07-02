@@ -3,11 +3,12 @@
 namespace App\Modules\Livros\Application\UseCases;
 
 use App\Modules\Livros\Application\DTOs\CadastrarLivroData;
-use App\Modules\Livros\Domain\Contracts\LivroRepositoryInterface;
+use App\Modules\Livros\Application\Ports\In\CreateBookUseCaseInterface;
+use App\Modules\Livros\Application\Ports\out\LivroRepositoryInterface;
 use App\Modules\Livros\Domain\Entities\Livro;
 use App\Modules\Livros\Domain\Exceptions\LivroJaExisteException;
 
-class CadastrarLivroUseCase
+class CadastrarLivroUseCase implements CreateBookUseCaseInterface
 {
   public function __construct(
     private readonly LivroRepositoryInterface $livroRepository,

@@ -4,7 +4,7 @@ namespace App\Modules\Livros\Presentation\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Modules\Livros\Application\DTOs\CadastrarLivroData;
-use App\Modules\Livros\Application\UseCases\CadastrarLivroUseCase;
+use App\Modules\Livros\Application\Ports\In\CreateBookUseCaseInterface;
 use App\Modules\Livros\Application\UseCases\ListaLivrosUseCase;
 use App\Modules\Livros\Presentation\Http\Requests\CadastrarLivroRequest;
 use Illuminate\View\View;
@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 class LivroController extends Controller
 {
     public function __construct(
-        private readonly CadastrarLivroUseCase $cadastrarLivroUseCase,
+        private readonly CreateBookUseCaseInterface $cadastrarLivroUseCase,
         private readonly ListaLivrosUseCase $listaLivrosUseCase,
     ) {
     }
