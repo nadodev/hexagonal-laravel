@@ -4,7 +4,7 @@ namespace App\Modules\Livros\Application\UseCases;
 
 use App\Modules\Livros\Application\DTOs\CadastrarLivroData;
 use App\Modules\Livros\Application\Ports\In\CadastrarLivroUseCaseInterface;
-use App\Modules\Livros\Application\Ports\out\LivroRepositoryInterface;
+use App\Modules\Livros\Application\Ports\Out\LivroRepositoryInterface;
 use App\Modules\Livros\Domain\Entities\Livro;
 use App\Modules\Livros\Domain\Exceptions\LivroJaExisteException;
 
