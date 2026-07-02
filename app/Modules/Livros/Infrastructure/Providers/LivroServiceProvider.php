@@ -3,7 +3,7 @@
 namespace App\Modules\Livros\Infrastructure\Providers;
 
 use App\Modules\Livros\Application\Ports\In\CreateBookUseCaseInterface;
-use App\Modules\Livros\Application\Ports\out\LivroRepositoryInterface;
+use App\Modules\Livros\Application\Ports\Out\LivroRepositoryInterface;
 use App\Modules\Livros\Application\UseCases\CadastrarLivroUseCase;
 use App\Modules\Livros\Infrastructure\Repositories\LivroRepository;
 use Illuminate\Support\Facades\Route;

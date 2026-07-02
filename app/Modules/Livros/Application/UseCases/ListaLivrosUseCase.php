@@ -3,7 +3,7 @@
 namespace App\Modules\Livros\Application\UseCases;
 
 
-use App\Modules\Livros\Application\Ports\out\LivroRepositoryInterface;
+use App\Modules\Livros\Application\Ports\Out\LivroRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
 
 class ListaLivrosUseCase

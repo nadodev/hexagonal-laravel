@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Livros\Application\Ports\out;
+namespace App\Modules\Livros\Application\Ports\Out;
 
 
 use App\Modules\Livros\Domain\Entities\Livro;

@@ -2,7 +2,7 @@
 
 namespace App\Modules\Livros\Infrastructure\Repositories;
 
-use App\Modules\Livros\Application\Ports\out\LivroRepositoryInterface;
+use App\Modules\Livros\Application\Ports\Out\LivroRepositoryInterface;
 use App\Modules\Livros\Domain\Entities\Livro as LivroEntity;
 use App\Modules\Livros\Infrastructure\Models\Livro;
 use Illuminate\Database\Eloquent\Collection;
