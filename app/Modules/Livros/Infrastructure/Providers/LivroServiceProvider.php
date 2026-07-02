@@ -2,7 +2,7 @@
 
 namespace App\Modules\Livros\Infrastructure\Providers;
 
-use App\Modules\Livros\Application\Ports\In\CreateBookUseCaseInterface;
+use App\Modules\Livros\Application\Ports\In\CadastrarLivroUseCaseInterface;
 use App\Modules\Livros\Application\Ports\Out\LivroRepositoryInterface;
 use App\Modules\Livros\Application\UseCases\CadastrarLivroUseCase;
 use App\Modules\Livros\Infrastructure\Repositories\LivroRepository;
@@ -14,7 +14,7 @@ final class LivroServiceProvider extends ServiceProvider
   public function register(): void
   {
     $this->app->bind(
-      CreateBookUseCaseInterface::class,
+      CadastrarLivroUseCaseInterface::class,
       CadastrarLivroUseCase::class,
     );
 
